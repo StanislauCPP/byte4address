@@ -1,0 +1,1 @@
+SELECT 'aawdawd'::byte4address;
