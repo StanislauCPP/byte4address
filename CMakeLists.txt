@@ -38,7 +38,6 @@ target_include_directories(${LIBNAME} PRIVATE ${PG_INCLUDE_SERVER_DIR}
 
 # Getting postgres.lib from this linking
 target_link_directories(${LIBNAME} PRIVATE "${PG_LIB_DIR}")
-add_subdirectory(utils)
-target_link_libraries(${LIBNAME} PRIVATE postgres.lib utils)
+target_link_libraries(${LIBNAME} PRIVATE postgres.lib)
 
 include(libInstall.cmake)

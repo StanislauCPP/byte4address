@@ -17,5 +17,4 @@ include(${CMAKE_CURRENT_LIST_DIR}/../settingsForPostgres/psqlFlags.cmake)
 set(PSQLCOMMAND ${POSTGRES_PSQL}	${FLAG_HOST}		${Postgres_HOST}
 																	${FLAG_PORT}		${Postgres_PORT}
 																	${FLAG_DBNAME}	${Postgres_DBNAME}
-																	${FLAG_USER}		${Postgres_USER}
-																	${FLAG_FILE})
+																	${FLAG_USER}		${Postgres_USER})

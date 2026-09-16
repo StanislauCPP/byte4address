@@ -9,7 +9,7 @@ enable_testing()
 file(GLOB LISTINPUT input/*.sql)
 set(i 1)
 foreach(inp IN LISTS LISTINPUT)
-	add_test(NAME ${TESTNAME}${i} COMMAND ${PSQLCOMMAND} ${inp})
+	add_test(NAME ${TESTNAME}${i}	COMMAND ${PSQLCOMMAND} -f ${inp})
 	set_tests_properties(${TESTNAME}${i} PROPERTIES PASS_REGULAR_EXPRESSION "Direct string input is not allowed for byte4address")
 
 	math(EXPR i "${i} + 1")
