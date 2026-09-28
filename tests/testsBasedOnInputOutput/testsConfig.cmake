@@ -1,5 +1,7 @@
 # $ENV{SHELL} is used because windows 10 get bash from WSL instead git bash
 
+add_executable(${TESTNAME} ${CMAKE_CURRENT_LIST_DIR}/main.cpp)
+
 include(${CMAKE_CURRENT_LIST_DIR}/../psqlPreSet.cmake)
 enable_testing()
 
@@ -15,9 +17,9 @@ set_tests_properties(installing_type_byte4address_in_schema_for_testing PROPERTI
 
 # testComposition is used for tests (required and cleanup)
 function(testComposition testName psqlCustomSettings checkOutput fixtureSettings)
-	list(JOIN PSQLCOMMAND " " PSQLCOMMANDSTRING)
+	list(JOIN PSQLCOMMAND "\" \"" PSQLCOMMANDSTRING)																							# \" \" - defend from spaces which can may be in psql.exe absolute path
 	# -v "ON_ERROR_STOP=1" - need to get exit code from psql, for example exit code may be 1,2... not only 0.
-	add_test(NAME ${testName} COMMAND $ENV{SHELL} -c "${PSQLCOMMANDSTRING} ${psqlCustomSettings} -v \"ON_ERROR_STOP=1\"; ${checkOutput}")
+	add_test(NAME ${testName} COMMAND $ENV{SHELL} -c "\"${PSQLCOMMANDSTRING}\" ${psqlCustomSettings} -v \"ON_ERROR_STOP=1\"; ${checkOutput}")
 	set_tests_properties(${testName} PROPERTIES FIXTURES_${fixtureSettings} ${DBFIXTURE} LABELS ${DBFIXTURE})
 endfunction()
 
@@ -36,6 +38,6 @@ foreach(inp expOut IN ZIP_LISTS LISTINPUT LISTEXPECTEDOUTPUT)
 endforeach()
 
 testComposition("deleting_schema_with_tested_tables"
-								"-c \"DROP SCHEMA ${SCHEMA} CASCADE\" -q"
+								"-c 'DROP SCHEMA ${SCHEMA} CASCADE' -q"
 								""
 								"CLEANUP")

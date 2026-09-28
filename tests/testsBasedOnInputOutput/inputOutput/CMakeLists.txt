@@ -3,8 +3,6 @@ project(inputOutputTesting LANGUAGES CXX)
 
 cmake_path(GET CMAKE_CURRENT_SOURCE_DIR FILENAME TESTNAME)
 
-add_executable(${TESTNAME} main.cpp)
-
 include(../testsConfig.cmake)
 
 file(GLOB LISTINPUT incorrectInput/*.sql)

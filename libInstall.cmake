@@ -15,6 +15,8 @@ include(settingsForPostgres/psqlFlags.cmake OPTIONAL)
 # Type is installed in only single schema, before type is installed schema will be created; if INSTALLINGSCHEMA will not be setted than: -c "" - type will be installed in public schema
 if(INSTALLINGSCHEMA)
 	set(INSTALLINGSCHEMA "create schema if not exists ${INSTALLINGSCHEMA}; set schema '${INSTALLINGSCHEMA}';")
+else()
+	set(INSTALLINGSCHEMA "set schema 'public';")
 endif()
 
 # We need psql to execute sql script for introduction byte4address into postgres.
