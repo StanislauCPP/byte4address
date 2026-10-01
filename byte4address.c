@@ -50,12 +50,24 @@ DATUMFUNCTIONNAME(byte4address_constructor) {
 	PG_RETURN_DATUM(result);
 }
 
-DATUMFUNCTIONNAME(byte4address_comparasion_less)					{ PG_RETURN_BOOL((PG_GETARG_UINT32(0) <		PG_GETARG_UINT32(1))); }
+DATUMFUNCTIONNAME(byte4address_comparision_less)					{ PG_RETURN_BOOL((PG_GETARG_UINT32(0) <		PG_GETARG_UINT32(1))); }
 
-DATUMFUNCTIONNAME(byte4address_comparasion_greater)				{	PG_RETURN_BOOL((PG_GETARG_UINT32(0) >		PG_GETARG_UINT32(1))); }
+DATUMFUNCTIONNAME(byte4address_comparision_greater)				{	PG_RETURN_BOOL((PG_GETARG_UINT32(0) >		PG_GETARG_UINT32(1))); }
 
-DATUMFUNCTIONNAME(byte4address_comparasion_lessequal)			{ PG_RETURN_BOOL((PG_GETARG_UINT32(0) <=	PG_GETARG_UINT32(1))); }
+DATUMFUNCTIONNAME(byte4address_comparision_lessequal)			{ PG_RETURN_BOOL((PG_GETARG_UINT32(0) <=	PG_GETARG_UINT32(1))); }
 
-DATUMFUNCTIONNAME(byte4address_comparasion_greaterequal)	{ PG_RETURN_BOOL((PG_GETARG_UINT32(0) >=	PG_GETARG_UINT32(1))); }
+DATUMFUNCTIONNAME(byte4address_comparision_greaterequal)	{ PG_RETURN_BOOL((PG_GETARG_UINT32(0) >=	PG_GETARG_UINT32(1))); }
 
-DATUMFUNCTIONNAME(byte4address_comparasion_equal)					{ PG_RETURN_BOOL((PG_GETARG_UINT32(0) ==	PG_GETARG_UINT32(1))); }
+DATUMFUNCTIONNAME(byte4address_comparision_equal)					{ PG_RETURN_BOOL((PG_GETARG_UINT32(0) ==	PG_GETARG_UINT32(1))); }
+
+DATUMFUNCTIONNAME(byte4address_comparision_for_index) {
+	uint32_t leftArg = PG_GETARG_UINT32(0);
+	uint32_t rightArg = PG_GETARG_UINT32(1);
+
+	if (leftArg < rightArg)
+	 PG_RETURN_INT32(-1);
+	if (leftArg > rightArg)
+		PG_RETURN_INT32(1);
+
+	PG_RETURN_INT32(0);
+}	

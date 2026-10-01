@@ -38,29 +38,34 @@ CREATE OR REPLACE FUNCTION make_byte4address(integer, integer, integer, integer)
 	AS $$ select make_byte4address($1::smallint, $2::smallint, $3::smallint, $4::smallint) $$
 	LANGUAGE sql IMMUTABLE STRICT;
 
-CREATE OR REPLACE FUNCTION byte4address_comparasion_less(byte4address, byte4address)
+CREATE OR REPLACE FUNCTION byte4address_comparision_less(byte4address, byte4address)
 	RETURNS bool
-	AS '$libdir/byte4address', 'byte4address_comparasion_less'
+	AS '$libdir/byte4address', 'byte4address_comparision_less'
 	LANGUAGE C IMMUTABLE STRICT;
 
-CREATE OR REPLACE FUNCTION byte4address_comparasion_greater(byte4address, byte4address)
+CREATE OR REPLACE FUNCTION byte4address_comparision_greater(byte4address, byte4address)
 	RETURNS bool
-	AS '$libdir/byte4address', 'byte4address_comparasion_greater'
+	AS '$libdir/byte4address', 'byte4address_comparision_greater'
 	LANGUAGE C IMMUTABLE STRICT;
 
-CREATE OR REPLACE FUNCTION byte4address_comparasion_lessequal(byte4address, byte4address)
+CREATE OR REPLACE FUNCTION byte4address_comparision_lessequal(byte4address, byte4address)
 	RETURNS bool
-	AS '$libdir/byte4address', 'byte4address_comparasion_lessequal'
+	AS '$libdir/byte4address', 'byte4address_comparision_lessequal'
 	LANGUAGE C IMMUTABLE STRICT;
 
-CREATE OR REPLACE FUNCTION byte4address_comparasion_greaterequal(byte4address, byte4address)
+CREATE OR REPLACE FUNCTION byte4address_comparision_greaterequal(byte4address, byte4address)
 	RETURNS bool
-	AS '$libdir/byte4address', 'byte4address_comparasion_greaterequal'
+	AS '$libdir/byte4address', 'byte4address_comparision_greaterequal'
 	LANGUAGE C IMMUTABLE STRICT;
 
-CREATE OR REPLACE FUNCTION byte4address_comparasion_equal(byte4address, byte4address)
+CREATE OR REPLACE FUNCTION byte4address_comparision_equal(byte4address, byte4address)
 	RETURNS bool
-	AS '$libdir/byte4address', 'byte4address_comparasion_equal'
+	AS '$libdir/byte4address', 'byte4address_comparision_equal'
+	LANGUAGE C IMMUTABLE STRICT;
+
+CREATE OR REPLACE FUNCTION byte4address_comparision_for_index(byte4address, byte4address)
+	RETURNS integer
+	AS '$libdir/byte4address', 'byte4address_comparision_for_index'
 	LANGUAGE C IMMUTABLE STRICT;
 
 DO $$
@@ -75,7 +80,7 @@ BEGIN
 		CREATE OPERATOR < (
 			leftarg = byte4address,
 			rightarg = byte4address,
-			function = byte4address_comparasion_less,
+			function = byte4address_comparision_less,
 			COMMUTATOR = >,
 			NEGATOR = >=,
 			RESTRICT = scalarltsel,
@@ -85,7 +90,7 @@ BEGIN
 		CREATE OPERATOR > (
 			leftarg = byte4address,
 			rightarg = byte4address,
-			function = byte4address_comparasion_greater,
+			function = byte4address_comparision_greater,
 			COMMUTATOR = <,
 			NEGATOR = <=,
 			RESTRICT = scalargtsel,
@@ -95,7 +100,7 @@ BEGIN
 		CREATE OPERATOR <= (
 			leftarg = byte4address,
 			rightarg = byte4address,
-			function = byte4address_comparasion_lessequal,
+			function = byte4address_comparision_lessequal,
 			COMMUTATOR = >=,
 			NEGATOR = >,
 			RESTRICT = scalarlesel,
@@ -105,7 +110,7 @@ BEGIN
 		CREATE OPERATOR >= (
 			leftarg = byte4address,
 			rightarg = byte4address,
-			function = byte4address_comparasion_greaterequal,
+			function = byte4address_comparision_greaterequal,
 			COMMUTATOR = <=,
 			NEGATOR = <,
 			RESTRICT = scalargesel,
@@ -115,11 +120,20 @@ BEGIN
 		CREATE OPERATOR = (
 			leftarg = byte4address,
 			rightarg = byte4address,
-			function = byte4address_comparasion_equal,
+			function = byte4address_comparision_equal,
 			COMMUTATOR = =,
 			NEGATOR = <>,
 			RESTRICT = eqsel,
 			JOIN = eqjoinsel
 		);
+
+		CREATE OPERATOR CLASS byte4address_operators
+		DEFAULT FOR TYPE byte4address USING btree AS
+			OPERATOR	1	< ,
+			OPERATOR	2	<= ,
+			OPERATOR	3	= ,
+			OPERATOR	4	>= ,
+			OPERATOR	5	> ,
+			FUNCTION	1	byte4address_comparision_for_index(byte4address, byte4address);
 	end if;
 END $$;
